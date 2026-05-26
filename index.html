@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GateOS - Smart Gate Automation Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body
+    style="
+      font-family: &quot;DM Sans&quot;, sans-serif;
+      background-color: #f8fafc;
+    "
+  >
+    <header
+      class="sticky top-0 z-50 bg-white border-b border-gray-200"
+      style="box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08)"
+    >
+      <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold"
+            >
+              🚪
+            </div>
+            <span
+              class="text-xl font-bold"
+              style="font-family: &quot;Syne&quot;, sans-serif; color: #0f172a"
+              >GateOS</span
+            >
+          </div>
+          <h1
+            class="text-lg font-semibold"
+            style="color: #1f2937; font-family: &quot;Syne&quot;, sans-serif"
+          >
+            Smart Gate Automation Dashboard
+          </h1>
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"
+              ></div>
+              <span class="text-sm font-medium" style="color: #4b5563"
+                >System Online</span
+              >
+            </div>
+            <div
+              id="currentTime"
+              class="text-sm font-medium"
+              style="color: #6b7280; min-width: 70px"
+            >
+              --:--:--
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div
+      class="bg-white border-b border-gray-200"
+      style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04)"
+    >
+      <div class="max-w-7xl mx-auto px-6 py-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div
+              class="text-2xl font-bold"
+              style="color: #2563eb"
+              id="totalActivations"
+            >
+              0
+            </div>
+            <div
+              class="text-xs font-medium"
+              style="color: #6b7280; margin-top: 4px"
+            >
+              Total Activations Today
+            </div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div
+              class="text-2xl font-bold"
+              style="color: #0891b2"
+              id="avgResponseTime"
+            >
+              0.0s
+            </div>
+            <div
+              class="text-xs font-medium"
+              style="color: #6b7280; margin-top: 4px"
+            >
+              Average Response Time
+            </div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div class="text-2xl font-bold" style="color: #16a34a">99.9%</div>
+            <div
+              class="text-xs font-medium"
+              style="color: #6b7280; margin-top: 4px"
+            >
+              Uptime
+            </div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div class="text-2xl font-bold" style="color: #d97706">200cm</div>
+            <div
+              class="text-xs font-medium"
+              style="color: #6b7280; margin-top: 4px"
+            >
+              Sensor Range
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <main class="max-w-7xl mx-auto px-6 py-8">
+      <div class="mb-8 flex justify-center">
+        <button
+          id="simulateBtn"
+          class="simulate-btn"
+          style="font-family: &quot;Syne&quot;, sans-serif"
+        >
+          <span class="inline-block mr-2">🚗</span> Simulate Vehicle Detection
+        </button>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="card-premium">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="text-xl">📊</span>
+            <h2
+              class="text-lg font-bold"
+              style="font-family: &quot;Syne&quot;, sans-serif; color: #0f172a"
+            >
+              Gate Status
+            </h2>
+          </div>
+          <div class="mb-6">
+            <div id="gateStatusBadge" class="status-badge status-closed">
+              <span id="gateStatusText">Gate Closed</span>
+            </div>
+          </div>
+          <div class="text-sm font-medium mb-6" style="color: #6b7280">
+            Current Position:
+            <span id="gatePositionText" style="color: #0f172a; font-weight: 600"
+              >CLOSED</span
+            >
+          </div>
+          <div class="gate-animation-container">
+            <div class="gate-arm gate-arm-left"></div>
+            <div class="gate-arm gate-arm-right"></div>
+          </div>
+        </div>
+        <div class="card-premium">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="text-xl">📡</span>
+            <h2
+              class="text-lg font-bold"
+              style="font-family: &quot;Syne&quot;, sans-serif; color: #0f172a"
+            >
+              Sensor Status
+            </h2>
+          </div>
+          <div class="mb-6">
+            <div class="status-badge status-success"><span>✓ Active</span></div>
+          </div>
+          <div class="text-sm font-medium mb-6" style="color: #6b7280">
+            Ultrasonic sensor - HC-SR04 | Range: 2-200cm
+          </div>
+          <div class="sensor-bars-container">
+            <div class="sensor-bar"></div>
+            <div class="sensor-bar"></div>
+            <div class="sensor-bar"></div>
+            <div class="sensor-bar"></div>
+            <div class="sensor-bar"></div>
+            <div class="sensor-bar"></div>
+            <div class="sensor-bar"></div>
+            <div class="sensor-bar"></div>
+          </div>
+        </div>
+        <div class="card-premium">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="text-xl">🚗</span>
+            <h2
+              class="text-lg font-bold"
+              style="font-family: &quot;Syne&quot;, sans-serif; color: #0f172a"
+            >
+              Vehicle Detection
+            </h2>
+          </div>
+          <div class="mb-6">
+            <div id="vehicleStatusBadge" class="status-badge status-idle">
+              <span id="vehicleStatusText">No Vehicle Detected</span>
+            </div>
+          </div>
+          <div id="carSvgContainer" class="car-svg-container">
+            <svg viewBox="0 0 120 60" width="80" height="40">
+              <ellipse
+                cx="60"
+                cy="40"
+                rx="50"
+                ry="15"
+                fill="#2563EB"
+                opacity="0.2"
+              />
+              <rect
+                x="20"
+                y="25"
+                width="80"
+                height="15"
+                rx="5"
+                fill="#2563EB"
+              />
+              <rect
+                x="35"
+                y="12"
+                width="50"
+                height="13"
+                rx="3"
+                fill="#2563EB"
+              />
+              <rect x="38" y="15" width="15" height="8" fill="#E0E7FF" rx="2" />
+              <rect x="67" y="15" width="15" height="8" fill="#E0E7FF" rx="2" />
+              <circle cx="35" cy="42" r="5" fill="#1F2937" />
+              <circle cx="85" cy="42" r="5" fill="#1F2937" />
+            </svg>
+          </div>
+          <div class="text-sm font-medium text-center" style="color: #6b7280">
+            <span id="vehicleDescription">Waiting for vehicle...</span>
+          </div>
+        </div>
+        <div class="card-premium">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="text-xl">📏</span>
+            <h2
+              class="text-lg font-bold"
+              style="font-family: &quot;Syne&quot;, sans-serif; color: #0f172a"
+            >
+              Current Distance
+            </h2>
+          </div>
+          <div class="mb-6">
+            <div style="display: flex; align-items: baseline; gap: 6px">
+              <span
+                id="distanceValue"
+                class="text-4xl font-bold"
+                style="color: #2563eb"
+                >185</span
+              ><span class="text-lg font-medium" style="color: #6b7280"
+                >cm</span
+              >
+            </div>
+          </div>
+          <div class="distance-progress-container">
+            <div id="distanceProgressBar" class="distance-progress-bar"></div>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              margin-top: 8px;
+            "
+          >
+            <span class="text-xs font-medium" style="color: #6b7280">0 cm</span
+            ><span class="text-xs font-medium" style="color: #6b7280"
+              >200 cm</span
+            >
+          </div>
+        </div>
+        <div class="card-premium">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="text-xl">⏰</span>
+            <h2
+              class="text-lg font-bold"
+              style="font-family: &quot;Syne&quot;, sans-serif; color: #0f172a"
+            >
+              Last Detection Time
+            </h2>
+          </div>
+          <div class="mb-4">
+            <div
+              id="lastDetectionTimestamp"
+              class="text-xl font-bold"
+              style="color: #0f172a"
+            >
+              No detection yet
+            </div>
+          </div>
+          <div class="text-sm font-medium" style="color: #6b7280">
+            <span id="timeAgo">--</span>
+          </div>
+        </div>
+        <div class="card-premium">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="text-xl">📋</span>
+            <h2
+              class="text-lg font-bold"
+              style="font-family: &quot;Syne&quot;, sans-serif; color: #0f172a"
+            >
+              Event Log
+            </h2>
+          </div>
+          <div id="eventLog" class="event-log-container"></div>
+        </div>
+      </div>
+    </main>
+    <footer
+      class="bg-white border-t border-gray-200 py-6"
+      style="box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.08)"
+    >
+      <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <div style="color: #6b7280; font-size: 14px">
+          GateOS v1.0 · Smart Gate Automation System
+        </div>
+        <div style="color: #6b7280; font-size: 14px">
+          Robotics Internship Assignment
+        </div>
+      </div>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
