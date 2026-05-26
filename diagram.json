@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "author": "Gowtty Ammu",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-breadboard-mini", "id": "bb1", "top": 219.4, "left": -21.6, "attrs": {} },
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 28.8, "left": -187.16, "attrs": {} },
+    { "type": "wokwi-led", "id": "led1", "top": -32.4, "left": 23, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 52.8,
+      "left": 18.65,
+      "rotate": 90,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "ultrasonic1",
+      "top": -27.3,
+      "left": 91.9,
+      "attrs": { "distance": "365" }
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo1",
+      "top": 113.2,
+      "left": 220.8,
+      "attrs": { "hornColor": "green" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": -32.4,
+      "left": -15.4,
+      "attrs": { "color": "green" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 43.2,
+      "left": -19.75,
+      "rotate": 90,
+      "attrs": { "value": "220" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "led1:A", "r1:1", "green", [ "v0" ] ],
+    [ "esp:GND.2", "bb1:1t.a", "black", [ "v0", "h76.8" ] ],
+    [ "esp:5V", "bb1:1b.j", "red", [ "h-19.05", "v124.8", "h201.6" ] ],
+    [ "ultrasonic1:VCC", "bb1:17b.j", "red", [ "v268.8" ] ],
+    [ "ultrasonic1:GND", "bb1:17t.a", "black", [ "v0" ] ],
+    [ "servo1:GND", "bb1:16t.a", "black", [ "h0" ] ],
+    [ "servo1:V+", "bb1:16b.j", "red", [ "h-38.4", "v201.7", "h-48" ] ],
+    [ "ultrasonic1:TRIG", "esp:5", "green", [ "v0" ] ],
+    [ "ultrasonic1:ECHO", "esp:18", "green", [ "v0" ] ],
+    [ "servo1:PWM", "esp:13", "green", [ "v211.4", "h-460.8", "v-201.6" ] ],
+    [ "r1:2", "esp:15", "gold", [ "v181.2" ] ],
+    [ "led1:C", "bb1:6t.a", "black", [ "v0" ] ],
+    [ "led2:A", "r2:1", "green", [ "v0" ] ],
+    [ "r2:2", "esp:4", "gold", [ "v152.4" ] ],
+    [ "led2:C", "bb1:2t.a", "black", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
